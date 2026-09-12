@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.college.wallet.dto.LoginRequest;
 import com.college.wallet.dto.RegisterRequest;
 import com.college.wallet.dto.UserResponse;
 import com.college.wallet.dto.pinChangeAdminResponse;
@@ -66,7 +67,7 @@ public class UserController{
         return new ResponseEntity<> (userResponse,HttpStatus.CREATED);
     }
   @PostMapping("/login")
-  public ResponseEntity<?> loginUser(@Valid @RequestBody User loginRequestUser){
+  public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequestUser){
     String normalizedPhoneNumber=userService.NormalizePhoneNumber(loginRequestUser.getPhoneNumber());
     User user= userRepository.findByPhoneNumber(normalizedPhoneNumber).orElseThrow(()->new BusinessException("No such User found",HttpStatus.NOT_FOUND));
     if(passwordEncoder.matches(loginRequestUser.getPassword(),user.getPassword())){
